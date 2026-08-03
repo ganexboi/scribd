@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uber Project - Dark Edition</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <style>
+        body#all {
+
+            background: gold;
+            color: white;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            padding-top: 100px;
+            margin: 0;
+        }
+
+
+        #mainNavbar {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+        }
+
+        #formUber,
+        #startCount,
+        #counting,
+        #paused,
+        #stoppedNo {
+            background: #ffffff;
+            color: #333;
+            max-width: 480px;
+            margin: 20px auto;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: none;
+          
+        }
+
+        #formUber {
+            display: block;
+        }
+
+        .firstUber {
+            font-size: 3.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+            color: #fff;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 5px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        #error1,
+        #error2 {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+
+        button {
+            padding: 12px 30px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        #startRide,
+        #start,
+        #yes {
+            background: #000;
+            color: #fff;
+        }
+
+        #startRide:hover,
+        #start:hover {
+            background: #333;
+        }
+
+        #stop,
+        #no {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        #back {
+            background: #6c757d;
+            color: #fff;
+        }
+
+        #timer {
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 20px;
+            background: #f1f3f5;
+            border-radius: 10px;
+            color: #212529;
+        }
+
+        .rideEnded h1 {
+            color: #000;
+            font-weight: 800;
+            border-bottom: 3px solid #000;
+            display: inline-block;
+        }
+
+        hr {
+            border-top: 2px solid #000;
+            opacity: 1;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body id="all">
+
+    <!-- <nav id="mainNavbar" class="navbar navbar-expand-lg bg-white shadow-sm fixed-top">
+        <div class="container-fluid mx-5">
+            <a class="navbar-brand" href="#"><b>Uber</b> Javascript</a>
+        </div>
+    </nav> -->
+
+    <div class="firstUberdiv" id="firstUberdivJs">
+        <p class="firstUber">FOLA TRANSPORT</p>
+    </div>
+
+    <div id="formUber" class="container">
+        <div class="allForm">
+            <h1 class="uber"><b>Uber</b></h1>
+            <h3 class="mt-0">Book a ride now</h3>
+            <label class="mb-2"><b>From :</b></label><br>
+            <input type="text" id="from" class="mb-4" placeholder="Pickup location"><br>
+            <p id="error1"></p>
+
+            <label class="mb-2"><b>To :</b></label><br>
+            <input type="text" id="to" placeholder="Destination">
+            <p id="error2"></p>
+
+            <div class="text-center mt-3 startme">
+                <button id="startRide">Start Ride</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="startCount">
+        <div class="confirmALl">
+            <p id="confirm" class="text-center fw-bold fs-5"></p>
+            <div class="d-flex justify-content-center gap-4">
+                <button id="back">Back</button>
+                <button id="start">Start</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="counting">
+        <div class="gap-0 ">
+            <p id="timer" class="text-center mt-0">Ride in progress 00:00:00...</p>
+        </div>
+        <div class="d-flex justify-content-center gap-4 mt-3">
+            <button id="pause">Pause</button>
+            <button id="stop">Stop Ride</button>
+        </div>
+    </div>
+
+    <div id="paused">
+        <p id="pausedPara" class="text-dark text-center fw-bold fs-5"></p>
+        <div class="d-flex justify-content-center gap-4">
+            <button id="yes">Yes</button>
+            <button id="no">No</button>
+        </div>
+    </div>
+
+    <div id="stoppedNo">
+        <div class="text-center rideEnded mb-4">
+            <h1 id="ridEnded" class="p-2">Receipt</h1>
+        </div>
+
+        <div class="container">
+            <div class="d-flex justify-content-between p-1">
+                <h3>Base Fare</h3>
+                <h3 id="baseFare">₦1,000</h3>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between p-1">
+                <h3>Time taken</h3>
+                <h3 id="timeTaken">0h 0m 0s</h3>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between p-1">
+                <h3>Time fare</h3>
+                <h3 id="timeFare">₦0</h3>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between p-1">
+                <h3>Initial Total</h3>
+                <h3 id="initalTotal">₦0</h3>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between p-1">
+                <h3>Tax (15%)</h3>
+                <h3 id="taxPercent">₦0</h3>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between p-1">
+                <h2 class="fw-bold">Total Amount</h2>
+                <h2 id="totalAmount" class="fw-bold text-success">₦0</h2>
+            </div>
+            <hr>
+            <div class="text-center mt-3">
+                <button onclick="location.reload()" class="btn btn-dark">New Ride</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let seconds = 0, minutes = 0, hours = 0;
+        let timerInterval;
+
+        const UI = {
+            form: document.getElementById('formUber'),
+            confirmBox: document.getElementById('startCount'),
+            rideBox: document.getElementById('counting'),
+            pauseBox: document.getElementById('paused'),
+            receiptBox: document.getElementById('stoppedNo'),
+            timerText: document.getElementById('timer')
+        };
+
+        document.getElementById('startRide').onclick = () => {
+            const fromVal = document.getElementById('from').value;
+            const toVal = document.getElementById('to').value;
+
+            if (!fromVal || !toVal) {
+                document.getElementById('error1').innerText = !fromVal ? "Please enter pickup location" : "";
+                document.getElementById('error2').innerText = !toVal ? "Please enter destination" : "";
+            } else {
+                UI.form.style.display = "none";
+                UI.confirmBox.style.display = "block";
+                document.getElementById('confirm').innerText = `Do you want to start your ride from ${fromVal} to ${toVal}?`;
+            }
+        };
+
+        document.getElementById('start').onclick = () => {
+            UI.confirmBox.style.display = "none";
+            UI.rideBox.style.display = "block";
+            startClock();
+        };
+
+        function startClock() {
+            timerInterval = setInterval(() => {
+                seconds++;
+                if (seconds === 60) { seconds = 0; minutes++; }
+                if (minutes === 60) { minutes = 0; hours++; }
+
+                let h = hours < 10 ? "0" + hours : hours;
+                let m = minutes < 10 ? "0" + minutes : minutes;
+                let s = seconds < 10 ? "0" + seconds : seconds;
+                UI.timerText.innerText = `Ride in progress ${h}:${m}:${s}... heading to destination`;
+            }, 1000);
+        }
+
+        // Step 3: Pause/Resume
+        document.getElementById('pause').onclick = () => {
+            clearInterval(timerInterval);
+            UI.rideBox.style.display = "none";
+            UI.pauseBox.style.display = "block";
+            document.getElementById('pausedPara').innerText = "Ride is paused. Do you want to continue?";
+        };
+
+        document.getElementById('yes').onclick = () => {
+            UI.pauseBox.style.display = "none";
+            UI.rideBox.style.display = "block";
+            startClock();
+        };
+
+        document.getElementById('stop').onclick = () => {
+            clearInterval(timerInterval);
+            UI.rideBox.style.display = "none";
+            UI.receiptBox.style.display = "block";
+            calculateFare();
+        };
+
+        function calculateFare() {
+            const BASEFARE = 1000;
+            const PERMINUTERATE = 500; 
+            const totalMinutes = (hours * 60) + minutes + (seconds / 60);
+
+            const timeFare = Math.round(totalMinutes * PERMINUTERATE);
+            const subTotal = BASEFARE + timeFare;
+            const taxAmount = subTotal * 0.15; // 15% Tax calculation
+            const finalTotal = subTotal + taxAmount;
+
+            document.getElementById('timeTaken').innerText = `${hours}h ${minutes}m ${seconds}s`;
+            document.getElementById('baseFare').innerText = "₦" + BASEFARE;
+            document.getElementById('timeFare').innerText = "₦" + timeFare;
+            document.getElementById('initalTotal').innerText = "₦" + subTotal;
+            document.getElementById('taxPercent').innerText = "₦" + taxAmount.toFixed(2);
+            document.getElementById('totalAmount').innerText = "₦" + finalTotal.toLocaleString();
+            document.getElementById('ridEnded').innerText = "Arrived!";
+        }
+
+        document.getElementById('back').onclick = () => {
+            UI.confirmBox.style.display = "none";
+            UI.form.style.display = "block";
+        };
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
